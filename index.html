@@ -40,6 +40,12 @@
       margin-top: 10px;
     }
 
+    .mensagem {
+      margin-top: 15px;
+      font-style: italic;
+      color: #f1c40f;
+    }
+
     button {
       width: 100%;
       padding: 12px;
@@ -60,7 +66,6 @@
       color: white;
     }
 
-    /* 🔥 MODO ALERTA */
     .nuclear {
       animation: piscar 0.5s infinite;
       background: red !important;
@@ -76,13 +81,14 @@
 
 <body>
 
-<div class="container" id="app">
+<div class="container">
   <h2>Monitor de Estresse</h2>
 
   <div class="contador" id="contador">0</div>
   <p>dias com estresse com a Priscilla 💀</p>
 
   <div id="alertaTexto" class="alerta"></div>
+  <div id="mensagemTexto" class="mensagem"></div>
 
   <button class="add" onclick="incrementar()">🔥 Me estressei</button>
   <button class="reset" onclick="resetar()">😌 Dia de paz</button>
@@ -90,11 +96,37 @@
 
 <script>
   let contador = localStorage.getItem("estresse") || 0;
-  const limiteNuclear = 5;
 
   const contadorEl = document.getElementById("contador");
   const alertaEl = document.getElementById("alertaTexto");
-  const app = document.getElementById("app");
+  const msgEl = document.getElementById("mensagemTexto");
+
+  const mensagens = {
+    leve: [
+      "Hmm... começou cedo hoje 😅",
+      "Calma, respira...",
+      "Só ignora e segue o jogo",
+      "Você está por um fio..."
+    ],
+    moderado: [
+      "Situação ficando feia...",
+      "Respira antes de responder...",
+      "Isso vai dar ruim 👀",
+      "Controle emocional tá testado hoje"
+    ],
+    alto: [
+      "Perigo real ⚠️",
+      "Você já perdeu a paciência faz tempo",
+      "Modo sobrevivência ativado",
+      "Aqui já virou guerra psicológica"
+    ],
+    nuclear: [
+      "🚨 ALERTA NUCLEAR 🚨",
+      "Abandone o local imediatamente",
+      "Sem condições de continuar",
+      "Nível crítico atingido ☢️"
+    ]
+  };
 
   atualizarTela();
 
@@ -115,26 +147,53 @@
     atualizarTela();
   }
 
+  function random(lista) {
+    return lista[Math.floor(Math.random() * lista.length)];
+  }
+
   function atualizarTela() {
     contadorEl.innerText = contador;
 
-    // Estados progressivos
-    if (contador >= limiteNuclear) {
-      alertaEl.innerText = "🚨 ALERTA NUCLEAR ATIVADO 🚨";
+    let nivel = "";
+    let mensagem = "";
+
+    // 🔁 muda nível a cada 5 dias
+    if (contador >= 10) {
+      nivel = "nuclear";
       document.body.classList.add("nuclear");
-    } 
-    else if (contador >= 3) {
-      alertaEl.innerText = "⚠️ Situação ficando crítica...";
+    } else if (contador >= 5) {
+      nivel = "alto";
       document.body.classList.remove("nuclear");
-    } 
-    else if (contador >= 1) {
-      alertaEl.innerText = "😐 Já começou...";
+    } else if (contador >= 2) {
+      nivel = "moderado";
       document.body.classList.remove("nuclear");
-    } 
-    else {
-      alertaEl.innerText = "🕊️ Paz restaurada";
+    } else if (contador >= 1) {
+      nivel = "leve";
+      document.body.classList.remove("nuclear");
+    } else {
+      nivel = "paz";
       document.body.classList.remove("nuclear");
     }
+
+    // ALERTA PRINCIPAL
+    if (nivel === "nuclear") {
+      alertaEl.innerText = "🚨 ALERTA NUCLEAR ATIVADO 🚨";
+      mensagem = random(mensagens.nuclear);
+    } else if (nivel === "alto") {
+      alertaEl.innerText = "⚠️ Situação crítica";
+      mensagem = random(mensagens.alto);
+    } else if (nivel === "moderado") {
+      alertaEl.innerText = "😐 Atenção";
+      mensagem = random(mensagens.moderado);
+    } else if (nivel === "leve") {
+      alertaEl.innerText = "😶 Começou...";
+      mensagem = random(mensagens.leve);
+    } else {
+      alertaEl.innerText = "🕊️ Paz restaurada";
+      mensagem = "Hoje foi um bom dia... raro.";
+    }
+
+    msgEl.innerText = mensagem;
   }
 </script>
 
