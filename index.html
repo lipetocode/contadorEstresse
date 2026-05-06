@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Estresse</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a0000, #330000);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: 0.3s;
+    }
+
+    .container {
+      text-align: center;
+      background: #2b0000;
+      padding: 30px;
+      border-radius: 15px;
+      width: 320px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    }
+
+    .contador {
+      font-size: 70px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #ff3b3b;
+    }
+
+    .alerta {
+      color: yellow;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .add {
+      background-color: #c0392b;
+      color: white;
+    }
+
+    .reset {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    /* 🔥 MODO ALERTA */
+    .nuclear {
+      animation: piscar 0.5s infinite;
+      background: red !important;
+    }
+
+    @keyframes piscar {
+      0% { background: #330000; }
+      50% { background: red; }
+      100% { background: #330000; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container" id="app">
+  <h2>Monitor de Estresse</h2>
+
+  <div class="contador" id="contador">0</div>
+  <p>dias com estresse com a Priscilla 💀</p>
+
+  <div id="alertaTexto" class="alerta"></div>
+
+  <button class="add" onclick="incrementar()">🔥 Me estressei</button>
+  <button class="reset" onclick="resetar()">😌 Dia de paz</button>
+</div>
+
+<script>
+  let contador = localStorage.getItem("estresse") || 0;
+  const limiteNuclear = 5;
+
+  const contadorEl = document.getElementById("contador");
+  const alertaEl = document.getElementById("alertaTexto");
+  const app = document.getElementById("app");
+
+  atualizarTela();
+
+  function incrementar() {
+    contador++;
+    salvar();
+  }
+
+  function resetar() {
+    if (confirm("Dia de paz confirmado? 🙏")) {
+      contador = 0;
+      salvar();
+    }
+  }
+
+  function salvar() {
+    localStorage.setItem("estresse", contador);
+    atualizarTela();
+  }
+
+  function atualizarTela() {
+    contadorEl.innerText = contador;
+
+    // Estados progressivos
+    if (contador >= limiteNuclear) {
+      alertaEl.innerText = "🚨 ALERTA NUCLEAR ATIVADO 🚨";
+      document.body.classList.add("nuclear");
+    } 
+    else if (contador >= 3) {
+      alertaEl.innerText = "⚠️ Situação ficando crítica...";
+      document.body.classList.remove("nuclear");
+    } 
+    else if (contador >= 1) {
+      alertaEl.innerText = "😐 Já começou...";
+      document.body.classList.remove("nuclear");
+    } 
+    else {
+      alertaEl.innerText = "🕊️ Paz restaurada";
+      document.body.classList.remove("nuclear");
+    }
+  }
+</script>
+
+</body>
+</html>
