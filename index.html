@@ -95,7 +95,8 @@
 </div>
 
 <script>
-  let contador = localStorage.getItem("estresse") || 0;
+
+  let contador = parseInt(localStorage.getItem("estresse")) || 0;
 
   const contadorEl = document.getElementById("contador");
   const alertaEl = document.getElementById("alertaTexto");
@@ -109,34 +110,65 @@
       "Você está por um fio..."
     ],
     moderado: [
-      "Situação ficando feia...",
       "Respira antes de responder...",
-      "Isso vai dar ruim 👀",
-      "Controle emocional tá testado hoje"
+      "Situação ficando feia...",
+      "Controle emocional em teste",
+      "Isso vai terminar em áudio de 5 minutos"
     ],
     alto: [
-      "Perigo real ⚠️",
-      "Você já perdeu a paciência faz tempo",
-      "Modo sobrevivência ativado",
-      "Aqui já virou guerra psicológica"
+      "⚠️ Situação crítica",
+      "Aqui já virou guerra psicológica",
+      "A sanidade já foi embora",
+      "Modo sobrevivência ativado"
     ],
     nuclear: [
       "🚨 ALERTA NUCLEAR 🚨",
       "Abandone o local imediatamente",
-      "Sem condições de continuar",
-      "Nível crítico atingido ☢️"
+      "Nível crítico atingido ☢️",
+      "Sem condições psicológicas"
     ]
   };
 
+  verificarDias();
   atualizarTela();
 
+  // 🔥 VERIFICA QUANTOS DIAS PASSARAM
+  function verificarDias() {
+
+    const hoje = new Date().toDateString();
+    const ultimaData = localStorage.getItem("ultimaData");
+
+    // primeira execução
+    if (!ultimaData) {
+      localStorage.setItem("ultimaData", hoje);
+      return;
+    }
+
+    const dataAntiga = new Date(ultimaData);
+    const dataAtual = new Date(hoje);
+
+    const diferenca = Math.floor(
+      (dataAtual - dataAntiga) / (1000 * 60 * 60 * 24)
+    );
+
+    // adiciona automaticamente
+    if (diferenca > 0) {
+      contador += diferenca;
+      salvar();
+    }
+
+    localStorage.setItem("ultimaData", hoje);
+  }
+
+  // 🔥 botão manual
   function incrementar() {
     contador++;
     salvar();
   }
 
+  // 😌 reset
   function resetar() {
-    if (confirm("Sério? Não rolou nenhum estresse hoje? 🙏")) {
+    if (confirm("Dia de paz confirmado? 🙏")) {
       contador = 0;
       salvar();
     }
@@ -152,50 +184,69 @@
   }
 
   function atualizarTela() {
+
     contadorEl.innerText = contador;
 
     let nivel = "";
     let mensagem = "";
 
-    // 🔁 muda nível a cada 5 dias
-    if (contador >= 10) {
+    if (contador >= 15) {
+
       nivel = "nuclear";
       document.body.classList.add("nuclear");
-    } else if (contador >= 5) {
+
+    } else if (contador >= 10) {
+
       nivel = "alto";
       document.body.classList.remove("nuclear");
-    } else if (contador >= 2) {
+
+    } else if (contador >= 5) {
+
       nivel = "moderado";
       document.body.classList.remove("nuclear");
+
     } else if (contador >= 1) {
+
       nivel = "leve";
       document.body.classList.remove("nuclear");
+
     } else {
+
       nivel = "paz";
       document.body.classList.remove("nuclear");
     }
 
-    // ALERTA PRINCIPAL
-    if (nivel === "nuclear") {
-      alertaEl.innerText = "🚨 ALERTA NUCLEAR ATIVADO 🚨";
-      mensagem = random(mensagens.nuclear);
-    } else if (nivel === "alto") {
-      alertaEl.innerText = "⚠️ Situação crítica";
-      mensagem = random(mensagens.alto);
-    } else if (nivel === "moderado") {
-      alertaEl.innerText = "😐 Atenção";
-      mensagem = random(mensagens.moderado);
-    } else if (nivel === "leve") {
-      alertaEl.innerText = "😶 Começou...";
-      mensagem = random(mensagens.leve);
-    } else {
-      alertaEl.innerText = "🕊️ Paz restaurada";
-      mensagem = "Hoje foi um bom dia... raro.";
+    // ALERTAS
+    switch(nivel) {
+
+      case "leve":
+        alertaEl.innerText = "😐 Primeiros sinais";
+        mensagem = random(mensagens.leve);
+      break;
+
+      case "moderado":
+        alertaEl.innerText = "⚠️ Atenção";
+        mensagem = random(mensagens.moderado);
+      break;
+
+      case "alto":
+        alertaEl.innerText = "🔥 Situação crítica";
+        mensagem = random(mensagens.alto);
+      break;
+
+      case "nuclear":
+        alertaEl.innerText = "🚨 ALERTA NUCLEAR ATIVADO 🚨";
+        mensagem = random(mensagens.nuclear);
+      break;
+
+      default:
+        alertaEl.innerText = "🕊️ Paz restaurada";
+        mensagem = "Milagre aconteceu hoje.";
     }
 
     msgEl.innerText = mensagem;
   }
-</script>
 
+</script>
 </body>
 </html>
