@@ -103,32 +103,52 @@
   const msgEl = document.getElementById("mensagemTexto");
 
   const mensagens = {
-    leve: [
-      "Hmm... começou cedo hoje 😅",
-      "Calma, respira...",
-      "Só ignora e segue o jogo",
-      "Você está por um fio..."
-    ],
-    moderado: [
-      "Respira antes de responder...",
-      "Situação ficando feia...",
-      "Controle emocional em teste",
-      "Isso vai terminar em áudio de 5 minutos"
-    ],
-    alto: [
-      "⚠️ Situação crítica",
-      "Aqui já virou guerra psicológica",
-      "A sanidade já foi embora",
-      "Modo sobrevivência ativado"
-    ],
-    nuclear: [
-      "🚨 ALERTA NUCLEAR 🚨",
-      "Abandone o local imediatamente",
-      "Nível crítico atingido ☢️",
-      "Sem condições psicológicas"
-    ]
-  };
 
+  leve: [
+
+    "Hmm... começou cedo hoje 😅",
+    "Só ignora e segue o jogo.",
+    "Você ainda tem esperança.",
+    "Calma... talvez amanhã melhore.",
+    "Primeiros danos emocionais detectados."
+  ],
+
+  moderado: [
+
+    "Respira antes de responder...",
+    "Controle emocional em estado instável.",
+    "Discussão detectada em órbita próxima.",
+    "Seu psicológico pediu férias.",
+    "O silêncio já está ficando estranho.",
+    "Nível de paciência abaixo do recomendado."
+  ],
+
+  alto: [
+
+    "⚠️ Situação crítica.",
+    "A sanidade já não responde aos comandos.",
+    "Modo sobrevivência ativado.",
+    "Toda conversa agora parece uma armadilha.",
+    "A diplomacia falhou completamente.",
+    "Seu cérebro entrou em modo defesa.",
+    "Já existem danos psicológicos permanentes."
+  ],
+
+  nuclear: [
+
+    "🚨 ALERTA NUCLEAR 🚨",
+    "Abandone o local imediatamente.",
+    "Não há mais negociações possíveis.",
+    "A OTAN foi acionada.",
+    "Estado emocional entrou em colapso.",
+    "O sistema detectou níveis ilegais de estresse.",
+    "Seu último neurônio está lutando bravamente.",
+    "O psicológico foi de arrasta pra cima.",
+    "Toda esperança foi oficialmente perdida.",
+    "☢️ FIM DA LINHA ☢️"
+  ]
+
+};
   verificarDias();
   atualizarTela();
 
@@ -190,22 +210,22 @@
     let nivel = "";
     let mensagem = "";
 
-    if (contador >= 15) {
+    if (contador >= 30) {
 
       nivel = "nuclear";
       document.body.classList.add("nuclear");
 
-    } else if (contador >= 10) {
+    } else if (contador >= 20) {
 
       nivel = "alto";
       document.body.classList.remove("nuclear");
 
-    } else if (contador >= 5) {
+    } else if (contador >= 10) {
 
       nivel = "moderado";
       document.body.classList.remove("nuclear");
 
-    } else if (contador >= 1) {
+    } else if (contador >= 5) {
 
       nivel = "leve";
       document.body.classList.remove("nuclear");
