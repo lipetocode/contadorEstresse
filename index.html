@@ -148,8 +148,45 @@
 
 };
   
+  if (!verificarFimDeSemana()) {
+
   verificarDias();
   atualizarTela();
+
+}
+
+  // VERIFICAR FINAL DE SEMANA E RESETAR CONTADOR.
+
+  function verificarFimDeSemana() {
+
+  const hoje = new Date().getDay();
+
+  // 0 = Domingo
+  // 6 = Sábado
+
+  if (hoje === 0 || hoje === 6) {
+
+    contador = 0;
+
+    localStorage.setItem("estresse", contador);
+
+    alertaEl.innerText = "🕊️ Protocolo de recuperação emocional";
+    msgEl.innerText = "Final de semana detectado. Reinicialização automática da sanidade executada.";
+
+    document.body.classList.remove("nuclear");
+
+    const sirene = document.getElementById("sirene");
+
+    if (sirene) {
+      sirene.pause();
+      sirene.currentTime = 0;
+    }
+
+    return true;
+  }
+
+  return false;
+}
 
   // 🔥 VERIFICA QUANTOS DIAS PASSARAM
   function verificarDias() {
